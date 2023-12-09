@@ -18,12 +18,11 @@ public class HelloApplication extends Application {
 
 //            String background_musicfile = "Interstellar-Theme.mp3";
 //            URL resource = getClass().getResource(background_musicfile);
-//
 //            Media bgsound = new Media(resource.toString());
 //            MediaPlayer bgPlayer = new MediaPlayer(bgsound);
 //            bgPlayer.play();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("GamePlay.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setTitle("Stick Hero");
             stage.setScene(scene);

@@ -289,7 +289,6 @@ public class Game implements Initializable {
 
     public void showHighScore(MouseEvent event){
         main_high.setText(String.valueOf(highScore));
-
     }
 
     public void switchToMainMenu(ActionEvent event) throws IOException {
