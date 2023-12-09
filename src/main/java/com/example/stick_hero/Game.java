@@ -122,7 +122,14 @@ public class Game implements Initializable {
         stickFallTransition.setAutoReverse(false);
         stickFallTransition.setCycleCount(1);
         stickFallTransition.setOnFinished(e-> {
-           heroMove_success();
+            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
+            heroMove_success();
+//            if(heroReaches == true){
+//                heroMove_success();
+//            }
+//            else{
+//                heroMove_fail();
+//            }
         });
 
         //sequential1 = new SequentialTransition( stickFallTransition);
@@ -139,19 +146,8 @@ public class Game implements Initializable {
     public void stopGrowingStickMethod(MouseEvent event) throws IOException {
         if (flagOnMouseReleaseMethod) {
             timeline_stickGrow.stop();
-
             stickFallTransition.play();
-            //sequential1.play();
 
-            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
-
-            //heroMove_success();
-//            if(heroReaches == true){
-//                heroMove_success();
-//            }
-//            else{
-//                heroMove_fail();
-//            }
             flagOnMouseReleaseMethod = false;
         }
     }
@@ -170,14 +166,9 @@ public class Game implements Initializable {
 
     }
 
-
-    //need to solve How to stop the hero once it reaches it's required coordinate.
-
     private void heroMove_success(){
         int heroMoveCycleCount = (int) ((int) (pillar2.getX() + pillar2.getWidth()) - (pillar1.getX()+pillar1.getWidth()) - 5);
-//        System.out.println(heroMoveCycleCount);
-//        System.out.println(pillar2.getX());
-//        System.out.println(pillar1.getX());
+
         timeline_herosuccessful = new Timeline(new KeyFrame(Duration.millis(2), e->{
             int x=1;
             hero1.setLayoutX(hero1.getLayoutX()+x);
@@ -185,9 +176,10 @@ public class Game implements Initializable {
         ));
         timeline_herosuccessful.setCycleCount(heroMoveCycleCount);
         timeline_herosuccessful.play();
-
-        update_score();
-        nextIterPrep();
+        timeline_herosuccessful.setOnFinished(e->{
+            update_score();
+            nextIterPrep();
+        });
     }
 
     private void heroMove_fail(){
@@ -239,7 +231,13 @@ public class Game implements Initializable {
         }));
         next_iter_prep.setCycleCount(nextIterCycleCount);
         next_iter_prep.play();
+        next_iter_prep.setOnFinished(e->{
+            add_rem_elem();
+        });
 
+    }
+
+    private void add_rem_elem(){
         //maybe I will need to add some of the
         Rectangle trash = pillar1;
         anchor_pane_game.getChildren().remove(trash);
@@ -259,7 +257,6 @@ public class Game implements Initializable {
         //Setting cherry for the next iteration.
         setCherry();
         cherry_collected = false;
-
 
     }
 
