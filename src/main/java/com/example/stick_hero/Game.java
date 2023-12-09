@@ -19,6 +19,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -50,14 +51,12 @@ public class Game implements Initializable {
     @FXML
     private Text main_high;
 
-
-    private int s=292;
-    private int y=0;
-
     private Timeline timeline_stickGrow;
     private Timeline timeline_herosuccessful;
     private Timeline timeline_herofailure;
     private Timeline next_iter_prep;
+    private Timeline stick_fall_timeline;
+    private Timeline hero_fall_timeline;
 
     private boolean flagOnMouseReleaseMethod=true;
     private boolean flagOnMousePushMethod=true;
@@ -69,7 +68,6 @@ public class Game implements Initializable {
     private Stick activeStick;
     private ImageView hero1;
     private Rectangle rectangle_stick;
-    SequentialTransition sequential1;
 
     private int this_game_score=0;
     private RotateTransition stickFallTransition;
@@ -96,24 +94,58 @@ public class Game implements Initializable {
         anchor_pane_game.getChildren().add(pillar2);
         isInitialFlag = true;
 
-        rectangle_stick = Stick.makeStick();
-        anchor_pane_game.getChildren().add(rectangle_stick);
-
-
         //adding hero to the game
         hero1 = Hero.getInstance();
         anchor_pane_game.getChildren().add(hero1);
 
+        //adding the stick to the game
+        rectangle_stick = Stick.makeStick();
+        anchor_pane_game.getChildren().add(rectangle_stick);
         rectangle_stick.setWidth(5);
+        rectangle_stick.setHeight(0);
+
 
 
         timeline_stickGrow = new Timeline(new KeyFrame(Duration.millis(5), e->{
-            y+=1;
-            s-=1;
-            rectangle_stick.setLayoutY(s);
-            rectangle_stick.setHeight(y);
+
+            rectangle_stick.setY(rectangle_stick.getY()-1);
+            rectangle_stick.setHeight(rectangle_stick.getHeight()+1);
+
         }));
         timeline_stickGrow.setCycleCount(Animation.INDEFINITE);
+
+        Rotate stick_fall = new Rotate(0, rectangle_stick.getX()+rectangle_stick.getWidth()/2, rectangle_stick.getHeight()+rectangle_stick.getY());
+        rectangle_stick.getTransforms().add(stick_fall);
+        stick_fall_timeline = new Timeline(new KeyFrame(Duration.millis(10),e->{
+            while (true) {
+//                if(stick_fall.getAngle()>90){
+//                    stick_fall_timeline.stop();
+//                    break;
+//                }
+//                else{
+//                    stick_fall.setAngle(stick_fall.getAngle()+1);
+//                }
+                if(stick_fall.getAngle()<90){
+                    stick_fall.setAngle(stick_fall.getAngle()+1);
+                }
+                else{
+                    stick_fall_timeline.stop();
+                    heroMove_success();
+                }
+            }
+        }));
+
+
+        stick_fall_timeline.setOnFinished(e->{
+            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
+            heroMove_success();
+//            if(heroReaches == true){
+//                heroMove_success();
+//            }
+//            else{
+//                heroMove_fail();
+//            }
+        });
 
 
         //setting up the RotateTransition to start the stick fall transition.
@@ -132,9 +164,12 @@ public class Game implements Initializable {
 //            }
         });
 
-        //sequential1 = new SequentialTransition( stickFallTransition);
 
-
+    }
+    private void movePivot(Node node, double x, double y){
+        node.getTransforms().add(new Translate(x,-y));
+        node.setTranslateX(x);
+        node.setTranslateY(y);
     }
 
     public void startGrowingStickMethod(MouseEvent event) throws IOException{
@@ -146,7 +181,11 @@ public class Game implements Initializable {
     public void stopGrowingStickMethod(MouseEvent event) throws IOException {
         if (flagOnMouseReleaseMethod) {
             timeline_stickGrow.stop();
+
+//            movePivot(rectangle_stick,rectangle_stick.getHeight()/2, 0);
+
             stickFallTransition.play();
+            //stick_fall_timeline.play();
 
             flagOnMouseReleaseMethod = false;
         }
@@ -269,23 +308,29 @@ public class Game implements Initializable {
         return minX + (maxX-minX)* randomXcalc.nextDouble();
     }
 
+    //make sure to remove the commented code
     public void setCherry(){
         Random rand1 = new Random();
         boolean cherryhere = rand1.nextBoolean();
-        if(cherryhere== false){
-            System.out.println("No cherry in this iteration. ");
-        }
-        else{
-            System.out.println("Cherry placed in this iteration.");
+        System.out.println("Cherry placed in this iteration.");
             double cherryX = getCherryRandX();
             score_cherry.setLayoutX(cherryX);
             if(score_cherry.isVisible()==false){
                 score_cherry.setVisible(true);
             }
-        }
+//        if(cherryhere== false){
+//            System.out.println("No cherry in this iteration. ");
+//        }
+//        else{
+//            System.out.println("Cherry placed in this iteration.");
+//            double cherryX = getCherryRandX();
+//            score_cherry.setLayoutX(cherryX);
+//            if(score_cherry.isVisible()==false){
+//                score_cherry.setVisible(true);
+//            }
+//        }
         return;
     }
-
 
     public void showHighScore(MouseEvent event){
         main_high.setText(String.valueOf(highScore));

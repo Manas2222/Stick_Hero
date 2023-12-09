@@ -14,7 +14,7 @@ public class Hero {
 
     public static ImageView getInstance(){
         if(heroImg== null){
-            heroImg =new ImageView("E:/Programming/Assignments_Sem3/Stick_Hero/src/main/resources/com/example/stick_hero/hero1.png");
+            heroImg =new ImageView(HelloApplication.abs_path+"hero1.png");
         }
 
         heroImg.setLayoutX(224.0);

@@ -13,12 +13,12 @@ public class Stick extends Rectangle {
         Rectangle rectangleStick = new Rectangle();
         rectangleStick.setArcHeight(10.0);
         rectangleStick.setArcWidth(10.0);
-        rectangleStick.setHeight(10.0);
-        rectangleStick.setLayoutX(265.0);
-        rectangleStick.setLayoutY(292.0);
+        rectangleStick.setHeight(5.0);
+        rectangleStick.setWidth(5.0);
+        rectangleStick.setX(264.0);
+        rectangleStick.setY(298.0);
         rectangleStick.setStroke(Color.BLACK);
         rectangleStick.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
-        rectangleStick.setWidth(5.0);
 
         return rectangleStick;
     }
