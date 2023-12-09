@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="775.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.stick_hero.SceneManager">
+   <children>
+      <ImageView fitHeight="500.0" fitWidth="775.0" layoutY="-1.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@MainGame_Background.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="165.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STICK  HERO" textAlignment="CENTER" wrappingWidth="444.13671875">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Text>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="196.0" layoutX="503.0" layoutY="304.0" stroke="BLACK" strokeType="INSIDE" width="137.0" />
+      <ImageView fitHeight="51.0" fitWidth="41.0" layoutX="544.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@hero1.png" />
+         </image>
+      </ImageView>
+      <Group layoutX="86.0" layoutY="345.0" onMouseClicked="#exitGame">
+         <children>
+            <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffe500" height="35.0" onMouseClicked="#exitGame" stroke="BLACK" strokeType="INSIDE" width="104.0" />
+            <Text layoutX="41.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EXIT" />
+         </children>
+      </Group>
+      <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffe500" height="35.0" layoutX="87.0" layoutY="287.0" onMouseClicked="#switchToInstructions" stroke="BLACK" strokeType="INSIDE" width="104.0" />
+      <Text layoutX="128.0" layoutY="309.0" onMouseClicked="#switchToInstructions" strokeType="OUTSIDE" strokeWidth="0.0" text="HELP" />
+      <Group layoutX="344.0" layoutY="295.0" onMouseClicked="#switchToInstructions" />
+      <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffe500" height="35.0" layoutX="89.0" layoutY="165.0" onMouseClicked="#switchToGame" stroke="BLACK" strokeType="INSIDE" width="104.0" />
+      <Text layoutX="128.0" layoutY="187.0" onMouseClicked="#switchToInstructions" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAY" />
+      <Group layoutX="89.0" layoutY="225.0" onMouseClicked="#switchToHighScorePage">
+         <children>
+            <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffe500" height="35.0" onMouseClicked="#exitGame" stroke="BLACK" strokeType="INSIDE" width="104.0" />
+            <Text layoutX="18.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIGH SCORE" />
+         </children>
+      </Group>
+   </children>
+</AnchorPane>

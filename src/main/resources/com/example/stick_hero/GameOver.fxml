@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="500.0" prefWidth="775.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.stick_hero.Game">
+   <children>
+      <ImageView fitHeight="500.0" fitWidth="775.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@MainGame_Background.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="500.0" opacity="0.5" smooth="false" stroke="BLACK" strokeType="INSIDE" width="775.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="391.0" layoutX="256.0" layoutY="76.0" opacity="0.79" stroke="BLACK" strokeType="INSIDE" width="263.0" AnchorPane.leftAnchor="256.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffd400" height="43.0" layoutX="320.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE" width="135.0" />
+      <Text layoutX="338.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME OVER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fill="#545454" layoutX="313.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU'R SCORE..." wrappingWidth="149.0">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <TextArea layoutX="326.0" layoutY="183.0" opacity="0.75" prefHeight="57.0" prefWidth="122.0" />
+      <Group layoutX="349.0" layoutY="360.0" onMouseClicked="#switchToMainMenu">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffe500" height="25.0" onMouseClicked="#switchToGame" stroke="BLACK" strokeType="INSIDE" width="75.0" />
+            <Text layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAIN MENU" wrappingWidth="78.0390625" />
+         </children>
+      </Group>
+      <Group layoutX="349.0" layoutY="307.0">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffe500" height="25.0" onMouseClicked="#switchToGame" stroke="BLACK" strokeType="INSIDE" width="75.0" />
+            <Text layoutX="19.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="REVIVE" wrappingWidth="78.0390625" />
+         </children>
+      </Group>
+   </children>
+</AnchorPane>

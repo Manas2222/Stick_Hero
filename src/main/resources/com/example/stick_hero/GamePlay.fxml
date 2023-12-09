@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchor_pane_game" prefHeight="500.0" prefWidth="775.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.stick_hero.Game">
+   <children>
+      <ImageView fitHeight="500.0" fitWidth="775.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@MainGame_Background.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="starter_pillar" arcHeight="5.0" arcWidth="5.0" height="196.0" stroke="BLACK" strokeType="INSIDE" width="115.0" x="150.0" y="297.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" stroke="BLACK" strokeType="INSIDE" width="775.0" y="445.0" />
+      <Text fx:id="current_score" layoutX="732.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="24.40625">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="36.0" fitWidth="32.0" layoutX="728.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cherry.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="cherry_count" layoutX="706.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="24.40625">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3f3f40" height="23.0" layoutX="25.0" layoutY="26.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3f3f40" height="23.0" layoutX="37.0" layoutY="26.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
+      <Circle fill="#bfbfbf" layoutX="35.0" layoutY="37.0" onMouseClicked="#switchToPauseMenu" opacity="0.31" radius="21.0" stroke="BLACK" strokeType="INSIDE" />
+      <ImageView fx:id="score_cherry" fitHeight="36.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" x="281.0" y="302.0">
+         <image>
+            <Image url="@cherry.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="-2.0" layoutY="157.0" mnemonicParsing="false" onMousePressed="#startGrowingStickMethod" onMouseReleased="#stopGrowingStickMethod" opacity="0.0" prefHeight="343.0" prefWidth="775.0" />
+   </children>
+</AnchorPane>
