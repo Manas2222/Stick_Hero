@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class Game implements Initializable {
 
     private Stage stage;
-    private Scene scene;
+    static Scene scene;
     private Parent root;
 
     private int highScore=0;
@@ -50,6 +51,8 @@ public class Game implements Initializable {
     private ImageView score_cherry;
     @FXML
     private Text main_high;
+    @FXML
+    private Rectangle rectangle_stick;
 
     private Timeline timeline_stickGrow;
     private Timeline timeline_herosuccessful;
@@ -62,12 +65,14 @@ public class Game implements Initializable {
     private boolean flagOnMousePushMethod=true;
     private boolean isInitialFlag;
     private boolean cherry_collected = false;
+    private boolean hero_inverted = false;
+    private boolean hero_moving = false;
 
     private Rectangle pillar1;
     private Rectangle pillar2;
     private Stick activeStick;
     private ImageView hero1;
-    private Rectangle rectangle_stick;
+    //private Rectangle rectangle_stick;
 
     private int this_game_score=0;
     private RotateTransition stickFallTransition;
@@ -87,23 +92,33 @@ public class Game implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //SceneManager.GameScene.setOnKeyTyped(this::flipHero);
+        HelloApplication.game_scene.setOnKeyTyped(this::flipHero);
+
 
         //Add the first random pillar that you will add to the scene.
         pillar1 = starter_pillar;
+        System.out.println("Pillar1 X === " + pillar1.getX());
+        System.out.println("Pillar1 Width === " + pillar1.getWidth());
 
         pillar2 = Pillars.makePillar();
         anchor_pane_game.getChildren().add(pillar2);
         isInitialFlag = true;
+        System.out.println("Pillar2 X === " + pillar2.getX());
+        System.out.println("Pillar2 Width === " + pillar2.getWidth());
 
         //adding hero to the game
         hero1 = Hero.getInstance();
         anchor_pane_game.getChildren().add(hero1);
 
         //adding the stick to the game
-        rectangle_stick = Stick.makeStick();
-        anchor_pane_game.getChildren().add(rectangle_stick);
-        rectangle_stick.setWidth(5);
-        rectangle_stick.setHeight(0);
+//        rectangle_stick = Stick.makeStick();
+//        rectangle_stick.setWidth(5);
+//        rectangle_stick.setHeight(0);
+//        anchor_pane_game.getChildren().add(rectangle_stick);
+
+        System.out.println("Stick X === " + rectangle_stick.getX());
+        System.out.println("Stick Y === " + rectangle_stick.getY());
 
 
         //timeline for growing the stick.
@@ -116,20 +131,6 @@ public class Game implements Initializable {
 
 
 
-//        stick_fall_timeline.setOnFinished(e->{
-//            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
-//            System.out.println("abc");
-//            heroMove_success();
-//            System.out.println("def");
-////            if(heroReaches == true){
-////                heroMove_success();
-////            }
-////            else{
-////                heroMove_fail();
-////            }
-//        });
-
-
         //setting up the RotateTransition to start the stick fall transition.
         stickFallTransition = new RotateTransition(Duration.seconds(1), rectangle_stick);
         stickFallTransition.setByAngle(90);
@@ -138,14 +139,15 @@ public class Game implements Initializable {
 
         stickFallTransition.setOnFinished(e-> {
             boolean heroReaches = isInPillar(pillar1,pillar2,rectangle_stick);
-            //heroMove_success();
+            hero_moving = true;
+            heroMove_success();
             //heroMove_fail();
-            if(heroReaches == true){
-                heroMove_success();
-            }
-            else{
-                heroMove_fail();
-            }
+//            if(heroReaches == true){
+//                heroMove_success();
+//            }
+//            else{
+//                heroMove_fail();
+//            }
         });
 
 
@@ -175,6 +177,7 @@ public class Game implements Initializable {
     public void stopGrowingStickMethod(MouseEvent event) throws IOException {
         if (flagOnMouseReleaseMethod) {
             timeline_stickGrow.stop();
+            System.out.println("Stick Length =====" + rectangle_stick.getHeight());
 
             movePivot(rectangle_stick,rectangle_stick.getHeight()/2, 0);
             stickFallTransition.play();
@@ -186,12 +189,16 @@ public class Game implements Initializable {
     private boolean isInPillar(Rectangle pillar_initial, Rectangle pillar_final , Rectangle stick){
 
         double minXreq = pillar_final.getLayoutX() - (pillar_initial.getLayoutX()+ pillar_initial.getWidth());
+        System.out.println("Minimum required X: " + minXreq);
         double width = pillar_final.getWidth();
         double maxXreq = minXreq + width;
+        System.out.println("Maximum required X: " + maxXreq);
         if(stick.getHeight() > minXreq && stick.getHeight() < maxXreq){
+            System.out.println("Will X reach: " + "true");
             return true;
         }
         else{
+            System.out.println("Will X reach: " + "false");
             return false;
         }
 
@@ -202,11 +209,13 @@ public class Game implements Initializable {
 
         timeline_herosuccessful = new Timeline(new KeyFrame(Duration.millis(10), e->{
             hero1.setX(hero1.getX()+1);
+            checkCherryCollected();
         }
         ));
         timeline_herosuccessful.setCycleCount(heroMoveCycleCount);
         timeline_herosuccessful.play();
         timeline_herosuccessful.setOnFinished(e->{
+            hero_moving = false;
             update_score();
             nextIterPrep();
         });
@@ -243,20 +252,21 @@ public class Game implements Initializable {
             int cherry = Integer.parseInt(cherry_count.getText());
             cherry+=1;
             cherry_count.setText(String.valueOf(cherry));
-
         }
     }
 
     private void nextIterPrep(){
 
-        int nextIterCycleCount = (int) (pillar1.getX()+pillar1.getWidth() - pillar2.getX()+pillar2.getWidth());
+        int nextIterCycleCount = (int) (pillar2.getX()+pillar2.getWidth() - (pillar1.getX()+pillar1.getWidth()));
         next_iter_prep = new Timeline(new KeyFrame(Duration.millis(5), e->{
             int x=1;
             hero1.setLayoutX(hero1.getLayoutX()-x);
             rectangle_stick.setLayoutX(rectangle_stick.getLayoutX()-x);
             pillar1.setLayoutX(pillar1.getLayoutX()-x);
             pillar2.setLayoutX(pillar2.getLayoutX()-x);
+
         }));
+
         next_iter_prep.setCycleCount(nextIterCycleCount);
         next_iter_prep.play();
         next_iter_prep.setOnFinished(e->{
@@ -276,6 +286,10 @@ public class Game implements Initializable {
         anchor_pane_game.getChildren().add(pillar2);
 
         //add the new stick to the iteration.
+        Rectangle trash_stick = rectangle_stick;
+        trash_stick.setVisible(false);
+        //anchor_pane_game.getChildren().remove(trash_stick);
+
         rectangle_stick = Stick.makeStick();
         anchor_pane_game.getChildren().add(rectangle_stick);
         //setting the flags for the next iteration.
@@ -303,7 +317,7 @@ public class Game implements Initializable {
         boolean cherryhere = rand1.nextBoolean();
         System.out.println("Cherry placed in this iteration.");
             double cherryX = getCherryRandX();
-            score_cherry.setLayoutX(cherryX);
+            score_cherry.setX(cherryX);
             if(score_cherry.isVisible()==false){
                 score_cherry.setVisible(true);
             }
@@ -341,4 +355,33 @@ public class Game implements Initializable {
         }
         cherry_count.setText(String.valueOf(cherry));
     }
+
+    public void loadGameOverPage(){
+
+    }
+
+    private void checkCherryCollected(){
+        if(hero1.getX() == score_cherry.getX() && hero_inverted== true){
+            score_cherry.setVisible(false);
+            cherry_collected = true;
+        }
+    }
+
+    public void flipHero(KeyEvent e){
+        if(e.getCharacter()==" "){
+            if(hero_moving == true && hero_inverted==false){
+                hero1.setScaleY(-1);
+                hero1.setY(hero1.getY()+5);
+            }
+            else if(hero_moving == false){
+                return;
+            }
+            else if(hero_moving == true && hero_inverted == true){
+                hero1.setScaleY(1);
+                hero1.setY(hero1.getY()-5);
+            }
+
+        }
+    }
+
 }

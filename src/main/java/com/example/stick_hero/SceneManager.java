@@ -23,6 +23,8 @@ public class SceneManager implements SceneManagerInterface {
     private Scene scene;
     private Parent root;
 
+    public static Scene GameScene;
+
     public void switchToPauseMenu(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("PauseMenu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -35,7 +37,7 @@ public class SceneManager implements SceneManagerInterface {
     public void switchToGame(MouseEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("GamePlay.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+        GameScene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
