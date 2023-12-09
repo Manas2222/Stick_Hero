@@ -32,6 +32,7 @@ public class HelloApplication extends Application {
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("GamePlay.fxml"));
             game_scene = new Scene(fxmlLoader.load());
+
             //Scene scene = new Scene(fxmlLoader.load());
             stage.setTitle("Stick Hero");
             stage.setScene(game_scene);

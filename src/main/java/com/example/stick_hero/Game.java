@@ -74,7 +74,7 @@ public class Game implements Initializable {
     private ImageView hero1;
     //private Rectangle rectangle_stick;
 
-    private int this_game_score=0;
+    ScorePlayer score;
     private RotateTransition stickFallTransition;
 
     public void switchToPauseMenu(MouseEvent event) throws IOException {
@@ -91,9 +91,11 @@ public class Game implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        score = new ScorePlayer();
+        current_score.setText(String.valueOf(score.getScore()));
 
         //SceneManager.GameScene.setOnKeyTyped(this::flipHero);
-        HelloApplication.game_scene.setOnKeyTyped(this::flipHero);
+//        HelloApplication.game_scene.setOnKeyTyped(this::flipHero);
 
 
         //Add the first random pillar that you will add to the scene.
@@ -159,7 +161,6 @@ public class Game implements Initializable {
         hero_fall_timeline.setOnFinished(e->{
             //need to load the Game over and all there.
         });
-
 
     }
     private void movePivot(Node node, double x, double y){
@@ -245,8 +246,8 @@ public class Game implements Initializable {
     }
 
     private void update_score(){
-        this_game_score+=1;
-        current_score.setText(String.valueOf(this_game_score));
+        score.setScore(score.getScore()+1);
+        current_score.setText(String.valueOf(score.getScore()));
 
         if(cherry_collected == true){
             int cherry = Integer.parseInt(cherry_count.getText());
@@ -276,6 +277,7 @@ public class Game implements Initializable {
     }
 
     private void add_rem_elem(){
+
         //maybe I will need to add some of the
         Rectangle trash = pillar1;
         anchor_pane_game.getChildren().remove(trash);
@@ -286,12 +288,17 @@ public class Game implements Initializable {
         anchor_pane_game.getChildren().add(pillar2);
 
         //add the new stick to the iteration.
-        Rectangle trash_stick = rectangle_stick;
-        trash_stick.setVisible(false);
+//        Rectangle trash_stick = rectangle_stick;
+//        trash_stick.setVisible(false);
         //anchor_pane_game.getChildren().remove(trash_stick);
 
-        rectangle_stick = Stick.makeStick();
-        anchor_pane_game.getChildren().add(rectangle_stick);
+        //rectangle_stick = Stick.makeStick();
+        //anchor_pane_game.getChildren().add(rectangle_stick);
+
+        rectangle_stick.setHeight(5.0);
+        rectangle_stick.setWidth(5.0);
+        rectangle_stick.setX(262.0);
+        rectangle_stick.setY(298.0);
         //setting the flags for the next iteration.
         flagOnMouseReleaseMethod=true;
         flagOnMousePushMethod=true;
@@ -359,7 +366,6 @@ public class Game implements Initializable {
     public void loadGameOverPage(){
 
     }
-
     private void checkCherryCollected(){
         if(hero1.getX() == score_cherry.getX() && hero_inverted== true){
             score_cherry.setVisible(false);
