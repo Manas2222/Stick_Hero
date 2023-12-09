@@ -90,6 +90,7 @@ public class Game implements Initializable {
 
         //Add the first random pillar that you will add to the scene.
         pillar1 = starter_pillar;
+
         pillar2 = Pillars.makePillar();
         anchor_pane_game.getChildren().add(pillar2);
         isInitialFlag = true;
@@ -105,47 +106,28 @@ public class Game implements Initializable {
         rectangle_stick.setHeight(0);
 
 
-
+        //timeline for growing the stick.
         timeline_stickGrow = new Timeline(new KeyFrame(Duration.millis(5), e->{
-
             rectangle_stick.setY(rectangle_stick.getY()-1);
             rectangle_stick.setHeight(rectangle_stick.getHeight()+1);
 
         }));
         timeline_stickGrow.setCycleCount(Animation.INDEFINITE);
 
-        Rotate stick_fall = new Rotate(0, rectangle_stick.getX()+rectangle_stick.getWidth()/2, rectangle_stick.getHeight()+rectangle_stick.getY());
-        rectangle_stick.getTransforms().add(stick_fall);
-        stick_fall_timeline = new Timeline(new KeyFrame(Duration.millis(10),e->{
-            while (true) {
-//                if(stick_fall.getAngle()>90){
-//                    stick_fall_timeline.stop();
-//                    break;
-//                }
-//                else{
-//                    stick_fall.setAngle(stick_fall.getAngle()+1);
-//                }
-                if(stick_fall.getAngle()<90){
-                    stick_fall.setAngle(stick_fall.getAngle()+1);
-                }
-                else{
-                    stick_fall_timeline.stop();
-                    heroMove_success();
-                }
-            }
-        }));
 
 
-        stick_fall_timeline.setOnFinished(e->{
-            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
-            heroMove_success();
-//            if(heroReaches == true){
-//                heroMove_success();
-//            }
-//            else{
-//                heroMove_fail();
-//            }
-        });
+//        stick_fall_timeline.setOnFinished(e->{
+//            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
+//            System.out.println("abc");
+//            heroMove_success();
+//            System.out.println("def");
+////            if(heroReaches == true){
+////                heroMove_success();
+////            }
+////            else{
+////                heroMove_fail();
+////            }
+//        });
 
 
         //setting up the RotateTransition to start the stick fall transition.
@@ -153,15 +135,27 @@ public class Game implements Initializable {
         stickFallTransition.setByAngle(90);
         stickFallTransition.setAutoReverse(false);
         stickFallTransition.setCycleCount(1);
+
         stickFallTransition.setOnFinished(e-> {
-            boolean heroReaches = this.isInPillar(pillar1,pillar2,rectangle_stick);
-            heroMove_success();
-//            if(heroReaches == true){
-//                heroMove_success();
-//            }
-//            else{
-//                heroMove_fail();
-//            }
+            boolean heroReaches = isInPillar(pillar1,pillar2,rectangle_stick);
+            //heroMove_success();
+            //heroMove_fail();
+            if(heroReaches == true){
+                heroMove_success();
+            }
+            else{
+                heroMove_fail();
+            }
+        });
+
+
+        //timeline for making the hero fall.
+        hero_fall_timeline = new Timeline(new KeyFrame(Duration.millis(10), e->{
+            hero1.setY(hero1.getY()+1);
+        }));
+        hero_fall_timeline.setCycleCount(250);
+        hero_fall_timeline.setOnFinished(e->{
+            //need to load the Game over and all there.
         });
 
 
@@ -182,10 +176,8 @@ public class Game implements Initializable {
         if (flagOnMouseReleaseMethod) {
             timeline_stickGrow.stop();
 
-//            movePivot(rectangle_stick,rectangle_stick.getHeight()/2, 0);
-
+            movePivot(rectangle_stick,rectangle_stick.getHeight()/2, 0);
             stickFallTransition.play();
-            //stick_fall_timeline.play();
 
             flagOnMouseReleaseMethod = false;
         }
@@ -208,9 +200,8 @@ public class Game implements Initializable {
     private void heroMove_success(){
         int heroMoveCycleCount = (int) ((int) (pillar2.getX() + pillar2.getWidth()) - (pillar1.getX()+pillar1.getWidth()) - 5);
 
-        timeline_herosuccessful = new Timeline(new KeyFrame(Duration.millis(2), e->{
-            int x=1;
-            hero1.setLayoutX(hero1.getLayoutX()+x);
+        timeline_herosuccessful = new Timeline(new KeyFrame(Duration.millis(10), e->{
+            hero1.setX(hero1.getX()+1);
         }
         ));
         timeline_herosuccessful.setCycleCount(heroMoveCycleCount);
@@ -222,20 +213,18 @@ public class Game implements Initializable {
     }
 
     private void heroMove_fail(){
-        timeline_herosuccessful = new Timeline(new KeyFrame(Duration.millis(1), e->{
-            boolean transl_ongoing = true;
-            double initialX = hero1.getLayoutX();
-            while(transl_ongoing){
-                int x=1;
-                hero1.setLayoutX(hero1.getLayoutX()+x);
-                if( (hero1.getLayoutX() - initialX) == rectangle_stick.getHeight()) {
-                    timeline_herosuccessful.stop();
-                    transl_ongoing = false;
-                }
-            }
-        }));
-        //update_high_score();
+        int heroMoveCount = (int) (rectangle_stick.getHeight()+hero1.getFitWidth()+5);
 
+        timeline_herofailure = new Timeline(new KeyFrame(Duration.millis(2), e->{
+            hero1.setX(hero1.getX()+1);
+        }));
+        timeline_herofailure.setCycleCount(heroMoveCount);
+        timeline_herofailure.play();
+        timeline_herofailure.setOnFinished(e->{
+            update_high_score();
+            hero_fall_timeline.play();
+
+        });
     }
 
     private void update_high_score(){
@@ -260,7 +249,7 @@ public class Game implements Initializable {
 
     private void nextIterPrep(){
 
-        int nextIterCycleCount = (int) (pillar2.getX()+pillar2.getWidth() - pillar1.getX()+pillar1.getWidth());
+        int nextIterCycleCount = (int) (pillar1.getX()+pillar1.getWidth() - pillar2.getX()+pillar2.getWidth());
         next_iter_prep = new Timeline(new KeyFrame(Duration.millis(5), e->{
             int x=1;
             hero1.setLayoutX(hero1.getLayoutX()-x);

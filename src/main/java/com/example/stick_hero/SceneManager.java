@@ -38,32 +38,6 @@ public class SceneManager implements SceneManagerInterface {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-//        AnchorPane gamePane = new AnchorPane();
-//        Image bgImg = new Image("com/example/stick_hero/MainGame_Art scenery cartoon style game background vector image on VectorStock.jpeg");
-//        ImageView backgroundImg = new ImageView(bgImg);
-//        backgroundImg.setFitWidth(527.0);
-//        backgroundImg.setFitHeight(609.0);
-//        backgroundImg.setPickOnBounds(true);
-//        backgroundImg.setSmooth(false);
-//
-//
-//        //this one is not really a pillar just a piece of rectangle at the bottom of the scene
-//        Rectangle sceneBase = Pillars.makePillar(0.0, 565.0, 527.0, 45.0);
-//
-//        //creating the first rectangle at the starting of the game
-//        Rectangle startRect = Pillars.makePillar(150.0, 297.0, 115.0, 196.0);
-//
-//
-//        //adding the hero to the top of the initial first pillar
-//        Image heroImg = new Image("com/example/stick_hero/hero1.png");
-//        ImageView heroImg1 = new ImageView(heroImg);
-//        heroImg1.setFitHeight(51);
-//        heroImg1.setFitWidth(41);
-//        heroImg1.setLayoutX(218.0);
-//        heroImg1.setLayoutY(253.0);
-//        heroImg1.setPreserveRatio(true);
-//        heroImg1.setPickOnBounds(true);
-
     }
 
     // Code for the saving the number of cherries and all might be pending

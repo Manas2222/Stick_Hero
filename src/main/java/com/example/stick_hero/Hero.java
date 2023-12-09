@@ -17,8 +17,8 @@ public class Hero {
             heroImg =new ImageView(HelloApplication.abs_path+"hero1.png");
         }
 
-        heroImg.setLayoutX(224.0);
-        heroImg.setLayoutY(253.0);
+        heroImg.setX(224.0);
+        heroImg.setY(253.0);
         heroImg.setFitHeight(51.0);
         heroImg.setFitWidth(41.0);
         heroImg.setPreserveRatio(true);
