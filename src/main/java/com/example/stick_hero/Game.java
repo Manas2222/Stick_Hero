@@ -36,6 +36,7 @@ public class Game implements Initializable {
     static Scene scene;
     private Parent root;
 
+    //needs to be serialized.
     private int highScore=0;
 
 
@@ -52,7 +53,7 @@ public class Game implements Initializable {
     @FXML
     private Text main_high;
     @FXML
-    private Rectangle rectangle_stick;
+    //private Rectangle rectangle_stick;
 
     private Timeline timeline_stickGrow;
     private Timeline timeline_herosuccessful;
@@ -60,6 +61,8 @@ public class Game implements Initializable {
     private Timeline next_iter_prep;
     private Timeline stick_fall_timeline;
     private Timeline hero_fall_timeline;
+
+    private Timeline stick_fall_trial;
 
     private boolean flagOnMouseReleaseMethod=true;
     private boolean flagOnMousePushMethod=true;
@@ -72,7 +75,7 @@ public class Game implements Initializable {
     private Rectangle pillar2;
     private Stick activeStick;
     private ImageView hero1;
-    //private Rectangle rectangle_stick;
+    private Rectangle rectangle_stick;
 
     ScorePlayer score;
     private RotateTransition stickFallTransition;
@@ -114,10 +117,11 @@ public class Game implements Initializable {
         anchor_pane_game.getChildren().add(hero1);
 
         //adding the stick to the game
-//        rectangle_stick = Stick.makeStick();
-//        rectangle_stick.setWidth(5);
-//        rectangle_stick.setHeight(0);
-//        anchor_pane_game.getChildren().add(rectangle_stick);
+        rectangle_stick = Stick.makeStick();
+        rectangle_stick.setWidth(5);
+        rectangle_stick.setHeight(0);
+        anchor_pane_game.getChildren().add(rectangle_stick);
+        System.out.println(rectangle_stick.getId());
 
         System.out.println("Stick X === " + rectangle_stick.getX());
         System.out.println("Stick Y === " + rectangle_stick.getY());
@@ -153,6 +157,8 @@ public class Game implements Initializable {
         });
 
 
+
+
         //timeline for making the hero fall.
         hero_fall_timeline = new Timeline(new KeyFrame(Duration.millis(10), e->{
             hero1.setY(hero1.getY()+1);
@@ -162,7 +168,36 @@ public class Game implements Initializable {
             //need to load the Game over and all there.
         });
 
+
+
     }
+
+    public void rotateStick(Rectangle stick){
+
+        double pivotX = stick.getX()+stick.getWidth()/2;
+        double pivotY = stick.getY()+stick.getHeight();
+
+        Rotate rotate = new Rotate(0, pivotX,pivotY);
+        rotate.setAngle(90);
+        stick.getTransforms().add(rotate);
+
+        stick_fall_trial = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(rotate.angleProperty(), 0)),
+                new KeyFrame(Duration.millis(500), new KeyValue(rotate.angleProperty(), 90))
+        );
+
+        stick_fall_trial.setCycleCount(1);
+
+
+        stick_fall_trial.setOnFinished(e->{
+            hero_moving = true;
+            heroMove_success();
+        });
+        stick_fall_trial.play();
+
+    }
+
+
     private void movePivot(Node node, double x, double y){
         node.getTransforms().add(new Translate(x,-y));
         node.setTranslateX(x);
@@ -181,7 +216,8 @@ public class Game implements Initializable {
             System.out.println("Stick Length =====" + rectangle_stick.getHeight());
 
             movePivot(rectangle_stick,rectangle_stick.getHeight()/2, 0);
-            stickFallTransition.play();
+            //stickFallTransition.play();
+            rotateStick(rectangle_stick);
 
             flagOnMouseReleaseMethod = false;
         }
@@ -213,6 +249,7 @@ public class Game implements Initializable {
             checkCherryCollected();
         }
         ));
+
         timeline_herosuccessful.setCycleCount(heroMoveCycleCount);
         timeline_herosuccessful.play();
         timeline_herosuccessful.setOnFinished(e->{
@@ -288,17 +325,20 @@ public class Game implements Initializable {
         anchor_pane_game.getChildren().add(pillar2);
 
         //add the new stick to the iteration.
+
 //        Rectangle trash_stick = rectangle_stick;
 //        trash_stick.setVisible(false);
-        //anchor_pane_game.getChildren().remove(trash_stick);
-
-        //rectangle_stick = Stick.makeStick();
-        //anchor_pane_game.getChildren().add(rectangle_stick);
+//        anchor_pane_game.getChildren().remove(trash_stick);
+        anchor_pane_game.getChildren().remove(rectangle_stick);
+        rectangle_stick = Stick.makeStick();
+        anchor_pane_game.getChildren().add(rectangle_stick);
 
         rectangle_stick.setHeight(5.0);
         rectangle_stick.setWidth(5.0);
         rectangle_stick.setX(262.0);
         rectangle_stick.setY(298.0);
+        rectangle_stick.setLayoutX(0);
+        rectangle_stick.setLayoutY(0);
         //setting the flags for the next iteration.
         flagOnMouseReleaseMethod=true;
         flagOnMousePushMethod=true;
@@ -325,7 +365,7 @@ public class Game implements Initializable {
         System.out.println("Cherry placed in this iteration.");
             double cherryX = getCherryRandX();
             score_cherry.setX(cherryX);
-            if(score_cherry.isVisible()==false){
+            if(!score_cherry.isVisible()){
                 score_cherry.setVisible(true);
             }
 //        if(cherryhere== false){
@@ -373,20 +413,17 @@ public class Game implements Initializable {
         }
     }
 
-    public void flipHero(KeyEvent e){
-        if(e.getCharacter()==" "){
-            if(hero_moving == true && hero_inverted==false){
-                hero1.setScaleY(-1);
-                hero1.setY(hero1.getY()+5);
-            }
-            else if(hero_moving == false){
-                return;
-            }
-            else if(hero_moving == true && hero_inverted == true){
-                hero1.setScaleY(1);
-                hero1.setY(hero1.getY()-5);
-            }
-
+    public void flipHero(ActionEvent e){
+        if(hero_moving == true && hero_inverted==false){
+            hero1.setScaleY(-1);
+            hero1.setY(hero1.getY()+5);
+        }
+        else if(hero_moving == false){
+            return;
+        }
+        else if(hero_moving == true && hero_inverted == true){
+            hero1.setScaleY(1);
+            hero1.setY(hero1.getY()-5);
         }
     }
 

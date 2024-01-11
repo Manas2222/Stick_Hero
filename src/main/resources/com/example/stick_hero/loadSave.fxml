@@ -33,20 +33,9 @@
             <Text layoutX="15.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME 1" />
          </children>
       </Group>
-      <Group layoutX="347.0" layoutY="280.0">
-         <children>
-            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffe500" height="25.0" onMouseClicked="#switchToGame" stroke="BLACK" strokeType="INSIDE" width="75.0" />
-            <Text layoutX="14.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME 2" wrappingWidth="46.57421875" />
-         </children>
-      </Group>
-      <Group layoutX="347.0" layoutY="325.0" onMouseClicked="#switchToMainMenu">
-         <children>
-            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffe500" height="25.0" onMouseClicked="#switchToGame" stroke="BLACK" strokeType="INSIDE" width="75.0" />
-            <Text layoutX="16.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME 3" />
-         </children>
-      </Group>
+      <Group layoutX="347.0" layoutY="280.0" />
       <Group layoutX="347.0" layoutY="368.0" onMouseClicked="#exitGame" />
-      <Group layoutX="347.0" layoutY="368.0" onMouseClicked="#switchToMainMenu">
+      <Group layoutX="346.0" layoutY="280.0" onMouseClicked="#switchToMainMenu">
          <children>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffe500" height="25.0" onMouseClicked="#switchToGame" stroke="BLACK" strokeType="INSIDE" width="75.0" />
             <Text layoutX="3.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAIN MENU" wrappingWidth="73.57421875" />

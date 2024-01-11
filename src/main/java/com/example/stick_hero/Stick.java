@@ -20,9 +20,9 @@ public class Stick extends Rectangle {
         rectangleStick.setY(298.0);
         rectangleStick.setStroke(Color.BLACK);
         rectangleStick.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
-        AnchorPane anchor = (AnchorPane) HelloApplication.game_scene.lookup("#anchor_pane_game");
-        rectangleStick.setId("rectangle_stick");
-        anchor.getChildren().add(rectangleStick);
+        //AnchorPane anchor = (AnchorPane) HelloApplication.game_scene.lookup("#anchor_pane_game");
+        //rectangleStick.setId("rectangle_stick");
+        //anchor.getChildren().add(rectangleStick);
         System.out.println("Stick added to scene.");
 
         return rectangleStick;
